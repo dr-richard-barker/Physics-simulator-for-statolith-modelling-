@@ -1,9 +1,10 @@
+
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
 */
 
-import { SimulationConfig } from '../types';
+import { SimulationConfig, Ball } from '../types';
 
 const baseConfig: Omit<SimulationConfig, 'id' | 'name' | 'nuanceDescription'> = {
   shapeType: 'square',
@@ -11,13 +12,90 @@ const baseConfig: Omit<SimulationConfig, 'id' | 'name' | 'nuanceDescription'> = 
   gravity: 0.15,
   friction: 0.001,
   restitution: 0.8,
+  stickiness: 0,
   rotationSpeed: 0.005,
   ballCount: 3,
   ballSize: 8,
   initialSpeed: 5,
 };
 
+// Helper to generate the "Shaker" ball layout
+const getShakerBalls = (): Partial<Ball>[] => {
+    const balls: Partial<Ball>[] = [];
+    
+    // 10 Medium Yellow Balls on bottom
+    // Assume box is roughly -150 to 150. Bottom is +150.
+    for (let i = 0; i < 10; i++) {
+        balls.push({
+            pos: { x: (Math.random() * 200) - 100, y: 100 + Math.random() * 40 },
+            radius: 12,
+            color: '#FACC15', // Yellow
+            vel: { x: (Math.random() - 0.5) * 2, y: (Math.random() - 0.5) * 2 }
+        });
+    }
+
+    // 1 Large Red Sticky Ball at Top
+    balls.push({
+        pos: { x: 0, y: -120 },
+        radius: 30,
+        color: '#EF4444', // Red
+        stickiness: 0.5, // Sticky edges
+        vel: { x: 0, y: 0 }
+    });
+
+    // 20 Smaller Purple Domes (Balls) scattered
+    for (let i = 0; i < 20; i++) {
+        balls.push({
+            pos: { x: (Math.random() * 240) - 120, y: (Math.random() * 240) - 120 },
+            radius: 6,
+            color: '#A855F7', // Purple
+            vel: { x: (Math.random() - 0.5) * 4, y: (Math.random() - 0.5) * 4 }
+        });
+    }
+    
+    return balls;
+};
+
 export const presets: SimulationConfig[] = [
+  {
+    ...baseConfig,
+    id: 20,
+    name: "Earth Shaker",
+    shapeType: 'square',
+    gravity: 1.0, // 1g down
+    rotationMode: 'oscillate',
+    oscillationAmplitude: 0.61, // ~35 degrees
+    rotationSpeed: 0.3, // Used as frequency
+    ballCount: 31,
+    nuanceDescription: "1g gravity. Container oscillates 35° L/R. Sticky red ball at top.",
+    initialBalls: getShakerBalls(),
+  },
+  {
+    ...baseConfig,
+    id: 21,
+    name: "Lunar Shaker",
+    shapeType: 'square',
+    gravity: 0.16, // 0.16g
+    rotationMode: 'oscillate',
+    oscillationAmplitude: 0.61, // ~35 degrees
+    rotationSpeed: 0.3,
+    ballCount: 31,
+    nuanceDescription: "Moon gravity (0.16g). Oscillating container with mixed balls.",
+    initialBalls: getShakerBalls(),
+  },
+  {
+    ...baseConfig,
+    id: 22,
+    name: "Space Shaker",
+    shapeType: 'square',
+    gravity: 0.0, // Microgravity
+    rotationMode: 'oscillate',
+    oscillationAmplitude: 0.61, // ~35 degrees
+    rotationSpeed: 0.3,
+    ballCount: 31,
+    nuanceDescription: "Zero gravity. Oscillating container creates artificial chaos.",
+    initialBalls: getShakerBalls(),
+  },
   {
     ...baseConfig,
     id: 1,
@@ -70,6 +148,7 @@ export const presets: SimulationConfig[] = [
     vertexCount: 5,
     restitution: 0.4,
     friction: 0.05,
+    stickiness: 0.05,
     nuanceDescription: "Low bounciness, balls tend to roll.",
   },
   {
@@ -145,10 +224,7 @@ export const presets: SimulationConfig[] = [
     id: 16,
     name: "Horizontal Gravity",
     shapeType: 'square',
-    gravity: 0, // Handled by custom logic in hook if needed, but for now we simulate via rotation or vector hacking. 
-                // *Correction*: For simplicity in the shared hook, we might stick to Y gravity, 
-                // but let's simulate 'wind' by just setting gravity very low and initial speed high.
-                // Actually, let's just use normal gravity but high bounce.
+    gravity: 0, 
     restitution: 0.95,
     ballCount: 4,
     nuanceDescription: "Near perpetual motion machine.",

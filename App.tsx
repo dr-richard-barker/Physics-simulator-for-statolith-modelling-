@@ -1,3 +1,4 @@
+
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
@@ -7,7 +8,8 @@ import React, { useState } from 'react';
 import { presets } from './utils/presets';
 import SimulationCard from './components/SimulationCard';
 import { GlobalSettings, SimulationConfig } from './types';
-import { Play, Pause, Activity, Image as ImageIcon, Trash2, UploadCloud, RefreshCw, X } from 'lucide-react';
+import { Play, Pause, Activity, Image as ImageIcon, Trash2, UploadCloud, RefreshCw, X, Maximize2, Minimize2, ChevronLeft } from 'lucide-react';
+import Canvas from './components/Canvas';
 import { processImageForSimulation } from './utils/imageProcessor';
 
 const App: React.FC = () => {
@@ -17,12 +19,14 @@ const App: React.FC = () => {
     gravityMultiplier: 1.0,
     rotationMultiplier: 1.0,
     bouncinessMultiplier: 1.0,
+    stickinessMultiplier: 1.0,
     userImage: null,
   });
   
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true);
   const [editingSim, setEditingSim] = useState<SimulationConfig | null>(null);
+  const [maximizedSimId, setMaximizedSimId] = useState<number | null>(null);
 
   const togglePlay = () => {
     if (isPlaying) {
@@ -68,6 +72,7 @@ const App: React.FC = () => {
                     gravity: 0.2,
                     friction: 0.01,
                     restitution: 0.7,
+                    stickiness: 0,
                     rotationSpeed: 0.002, // Slow rotation for better manual control
                     ballCount: result.balls.length,
                     ballSize: 8,
@@ -93,6 +98,7 @@ const App: React.FC = () => {
 
   const removeSimulation = (id: number) => {
       setSimulations(prev => prev.filter(s => s.id !== id));
+      if (maximizedSimId === id) setMaximizedSimId(null);
   };
 
   const openEditor = (sim: SimulationConfig) => {
@@ -108,6 +114,8 @@ const App: React.FC = () => {
   const clearImage = () => {
     setGlobalSettings(prev => ({ ...prev, userImage: null }));
   };
+
+  const maximizedSimConfig = simulations.find(s => s.id === maximizedSimId);
 
   return (
     <div className="min-h-screen bg-black text-gray-100 font-sans selection:bg-cyan-500 selection:text-black">
@@ -187,23 +195,23 @@ const App: React.FC = () => {
                  </div>
               </div>
 
-               {/* Restitution Control */}
+               {/* Stickiness Control */}
                <div className="space-y-1.5">
                  <label className="text-xs font-medium text-gray-400 flex justify-between">
-                    <span>Global Bounce</span>
-                    <span className="text-cyan-400">{globalSettings.bouncinessMultiplier.toFixed(1)}x</span>
+                    <span>Global Stickiness</span>
+                    <span className="text-cyan-400">{globalSettings.stickinessMultiplier.toFixed(1)}x</span>
                  </label>
                  <div className="flex items-center h-7">
                     <input 
-                        type="range" min="0.1" max="1" step="0.1"
-                        value={globalSettings.bouncinessMultiplier}
-                        onChange={(e) => setGlobalSettings(p => ({...p, bouncinessMultiplier: parseFloat(e.target.value)}))}
+                        type="range" min="0" max="2" step="0.1"
+                        value={globalSettings.stickinessMultiplier}
+                        onChange={(e) => setGlobalSettings(p => ({...p, stickinessMultiplier: parseFloat(e.target.value)}))}
                         className="w-full h-1.5 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-cyan-500"
                     />
                  </div>
               </div>
 
-              {/* Image Analysis (New Feature) */}
+              {/* Image Analysis */}
               <div className="space-y-1.5">
                 <label className="text-xs font-medium text-gray-400 flex justify-between">
                     <span>Scan Image</span>
@@ -229,7 +237,7 @@ const App: React.FC = () => {
                 </div>
               </div>
 
-              {/* Texture Upload Control */}
+              {/* Texture Upload */}
               <div className="space-y-1.5">
                 <label className="text-xs font-medium text-gray-400 flex justify-between">
                     <span>Ball Texture</span>
@@ -273,7 +281,7 @@ const App: React.FC = () => {
 
       {/* Editor Modal Overlay */}
       {editingSim && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+        <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
             <div className="bg-gray-900 border border-cyan-500/30 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
                 <div className="p-4 border-b border-gray-800 flex justify-between items-center bg-gray-950">
                     <h2 className="text-lg font-bold text-white">Edit <span className="text-cyan-400">{editingSim.name}</span></h2>
@@ -323,6 +331,19 @@ const App: React.FC = () => {
 
                     <div className="space-y-2">
                         <label className="text-sm font-medium text-gray-300 flex justify-between">
+                            Wall Stickiness
+                            <span className="text-cyan-400">{editingSim.stickiness ? editingSim.stickiness.toFixed(2) : '0.00'}</span>
+                        </label>
+                        <input 
+                            type="range" min="0" max="0.5" step="0.01" 
+                            value={editingSim.stickiness || 0}
+                            onChange={(e) => setEditingSim({...editingSim, stickiness: parseFloat(e.target.value)})}
+                            className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-cyan-500"
+                        />
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium text-gray-300 flex justify-between">
                             Friction (Air Resistance)
                             <span className="text-cyan-400">{editingSim.friction.toFixed(3)}</span>
                         </label>
@@ -353,27 +374,63 @@ const App: React.FC = () => {
         </div>
       )}
 
-      {/* Grid Content */}
-      <main className="max-w-7xl mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 justify-items-center">
-          {simulations.map(sim => (
-            <SimulationCard 
-                key={sim.id} 
-                config={sim} 
-                globalSettings={globalSettings}
-                onDelete={removeSimulation} 
-                onEdit={openEditor}
-            />
-          ))}
-          
-          {/* Add New Button (Optional, if user deletes all) */}
-          {simulations.length === 0 && (
-              <div className="col-span-full text-center py-20">
-                  <p className="text-gray-500">No simulations active. Upload an image or refresh to reload presets.</p>
-                  <button onClick={() => setSimulations(presets)} className="mt-4 text-cyan-400 underline">Reset Defaults</button>
-              </div>
-          )}
-        </div>
+      {/* Main Content Area */}
+      <main className="w-full h-full min-h-[calc(100vh-80px)]">
+        
+        {/* Full Screen Mode */}
+        {maximizedSimConfig ? (
+            <div className="h-[calc(100vh-80px)] flex flex-col relative animate-in fade-in duration-300">
+                <div className="absolute top-4 left-4 z-20">
+                     <button 
+                        onClick={() => setMaximizedSimId(null)}
+                        className="flex items-center gap-2 bg-gray-900/80 backdrop-blur border border-gray-700 text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-all shadow-lg"
+                     >
+                        <ChevronLeft size={20} />
+                        Back to Grid
+                     </button>
+                </div>
+                <div className="absolute top-4 right-4 z-20 flex gap-3">
+                    <button 
+                        onClick={() => openEditor(maximizedSimConfig)}
+                        className="bg-gray-900/80 backdrop-blur p-2 rounded-lg border border-gray-700 text-white hover:text-cyan-400 transition-colors shadow-lg"
+                        title="Settings"
+                    >
+                        <Activity size={20} />
+                    </button>
+                </div>
+                <div className="flex-1 bg-black/50 w-full h-full">
+                     <Canvas 
+                        config={maximizedSimConfig} 
+                        globalSettings={globalSettings} 
+                     />
+                </div>
+                <div className="bg-gray-900/50 backdrop-blur border-t border-gray-800 p-4 text-center">
+                    <h2 className="text-xl font-bold text-cyan-400">{maximizedSimConfig.name}</h2>
+                    <p className="text-gray-400">{maximizedSimConfig.nuanceDescription}</p>
+                </div>
+            </div>
+        ) : (
+            /* Grid Mode */
+            <div className="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 justify-items-center animate-in fade-in slide-in-from-bottom-4 duration-500">
+                {simulations.map(sim => (
+                    <SimulationCard 
+                        key={sim.id} 
+                        config={sim} 
+                        globalSettings={globalSettings}
+                        onDelete={removeSimulation} 
+                        onEdit={openEditor}
+                        onMaximize={() => setMaximizedSimId(sim.id)}
+                    />
+                ))}
+                
+                {simulations.length === 0 && (
+                    <div className="col-span-full text-center py-20">
+                        <p className="text-gray-500">No simulations active. Upload an image or refresh to reload presets.</p>
+                        <button onClick={() => setSimulations(presets)} className="mt-4 text-cyan-400 underline">Reset Defaults</button>
+                    </div>
+                )}
+            </div>
+        )}
       </main>
 
     </div>

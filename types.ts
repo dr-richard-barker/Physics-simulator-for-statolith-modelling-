@@ -1,3 +1,4 @@
+
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
@@ -14,6 +15,10 @@ export interface Ball {
   vel: Vector2;
   radius: number;
   color: string;
+  // Per-ball physics overrides
+  stickiness?: number; 
+  restitution?: number;
+  density?: number;
 }
 
 export interface SimulationConfig {
@@ -24,7 +29,13 @@ export interface SimulationConfig {
   gravity: number; // Multiplier relative to base
   friction: number; // 0 to 1
   restitution: number; // Bounciness (0 to 1+)
-  rotationSpeed: number; // Radians per frame
+  stickiness: number; // Wall adhesion (0 to 1)
+  rotationSpeed: number; // Radians per frame (or frequency if oscillating)
+  
+  // Rotation behavior
+  rotationMode?: 'continuous' | 'oscillate';
+  oscillationAmplitude?: number; // Radians
+
   ballCount: number;
   ballSize: number;
   initialSpeed: number;
@@ -38,5 +49,6 @@ export interface GlobalSettings {
   gravityMultiplier: number;
   rotationMultiplier: number;
   bouncinessMultiplier: number;
+  stickinessMultiplier: number;
   userImage?: string | null;
 }

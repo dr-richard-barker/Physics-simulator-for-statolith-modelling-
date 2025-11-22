@@ -1,3 +1,4 @@
+
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
@@ -6,16 +7,17 @@
 import React from 'react';
 import { SimulationConfig, GlobalSettings } from '../types';
 import Canvas from './Canvas';
-import { Info, RefreshCw, X, Settings } from 'lucide-react';
+import { Info, RefreshCw, X, Settings, Maximize2 } from 'lucide-react';
 
 interface SimulationCardProps {
   config: SimulationConfig;
   globalSettings: GlobalSettings;
   onDelete: (id: number) => void;
   onEdit: (config: SimulationConfig) => void;
+  onMaximize: () => void;
 }
 
-const SimulationCard: React.FC<SimulationCardProps> = ({ config, globalSettings, onDelete, onEdit }) => {
+const SimulationCard: React.FC<SimulationCardProps> = ({ config, globalSettings, onDelete, onEdit, onMaximize }) => {
   const [resetKey, setResetKey] = React.useState(0);
 
   return (
@@ -23,10 +25,17 @@ const SimulationCard: React.FC<SimulationCardProps> = ({ config, globalSettings,
       
       {/* Header Overlay */}
       <div className="absolute top-0 left-0 w-full p-2 flex justify-between items-start z-10 pointer-events-none">
-        <div className="bg-black/60 backdrop-blur-sm rounded-lg px-2 py-1 border border-white/10">
-             <h3 className="text-cyan-400 font-bold text-xs uppercase tracking-wider">{config.name}</h3>
+        <div className="bg-black/60 backdrop-blur-sm rounded-lg px-2 py-1 border border-white/10 pointer-events-auto cursor-pointer" onClick={onMaximize}>
+             <h3 className="text-cyan-400 font-bold text-xs uppercase tracking-wider hover:text-cyan-300 transition-colors">{config.name}</h3>
         </div>
-        <div className="flex gap-2 pointer-events-auto">
+        <div className="flex gap-1.5 pointer-events-auto">
+             <button 
+                onClick={onMaximize}
+                className="bg-black/60 backdrop-blur-sm p-1.5 rounded-lg border border-white/10 text-gray-400 hover:text-cyan-400 hover:bg-white/10 transition-colors cursor-pointer"
+                title="Full Screen"
+            >
+                <Maximize2 size={14} />
+            </button>
              <button 
                 onClick={() => onEdit(config)}
                 className="bg-black/60 backdrop-blur-sm p-1.5 rounded-lg border border-white/10 text-gray-400 hover:text-cyan-400 hover:bg-white/10 transition-colors cursor-pointer"
@@ -71,9 +80,6 @@ const SimulationCard: React.FC<SimulationCardProps> = ({ config, globalSettings,
             </span>
             <span className="text-[10px] px-1.5 py-0.5 rounded bg-gray-800 text-gray-500 border border-gray-700">
                 Balls: {config.ballCount}
-            </span>
-            <span className="text-[10px] px-1.5 py-0.5 rounded bg-gray-800 text-gray-500 border border-gray-700">
-                Spin: {config.rotationSpeed}
             </span>
         </div>
       </div>
