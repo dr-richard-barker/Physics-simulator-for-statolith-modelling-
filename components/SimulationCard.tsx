@@ -7,7 +7,7 @@
 import React from 'react';
 import { SimulationConfig, GlobalSettings } from '../types';
 import Canvas from './Canvas';
-import { Info, RefreshCw, X, Settings, Maximize2 } from 'lucide-react';
+import { Info, RefreshCw, X, Settings, Maximize2, Sigma } from 'lucide-react';
 
 interface SimulationCardProps {
   config: SimulationConfig;
@@ -15,9 +15,10 @@ interface SimulationCardProps {
   onDelete: (id: number) => void;
   onEdit: (config: SimulationConfig) => void;
   onMaximize: () => void;
+  onExportMath: (config: SimulationConfig) => void;
 }
 
-const SimulationCard: React.FC<SimulationCardProps> = ({ config, globalSettings, onDelete, onEdit, onMaximize }) => {
+const SimulationCard: React.FC<SimulationCardProps> = ({ config, globalSettings, onDelete, onEdit, onMaximize, onExportMath }) => {
   const [resetKey, setResetKey] = React.useState(0);
 
   return (
@@ -29,6 +30,13 @@ const SimulationCard: React.FC<SimulationCardProps> = ({ config, globalSettings,
              <h3 className="text-cyan-400 font-bold text-xs uppercase tracking-wider hover:text-cyan-300 transition-colors">{config.name}</h3>
         </div>
         <div className="flex gap-1.5 pointer-events-auto">
+             <button 
+                onClick={() => onExportMath(config)}
+                className="bg-black/60 backdrop-blur-sm p-1.5 rounded-lg border border-white/10 text-gray-400 hover:text-purple-400 hover:bg-white/10 transition-colors cursor-pointer"
+                title="Export Mathematical Model"
+            >
+                <Sigma size={14} />
+            </button>
              <button 
                 onClick={onMaximize}
                 className="bg-black/60 backdrop-blur-sm p-1.5 rounded-lg border border-white/10 text-gray-400 hover:text-cyan-400 hover:bg-white/10 transition-colors cursor-pointer"

@@ -8,9 +8,10 @@ import React, { useState } from 'react';
 import { presets } from './utils/presets';
 import SimulationCard from './components/SimulationCard';
 import { GlobalSettings, SimulationConfig } from './types';
-import { Play, Pause, Activity, Image as ImageIcon, Trash2, UploadCloud, RefreshCw, X, Maximize2, Minimize2, ChevronLeft } from 'lucide-react';
+import { Play, Pause, Activity, Image as ImageIcon, Trash2, UploadCloud, RefreshCw, X, Maximize2, Minimize2, ChevronLeft, Sigma, Copy } from 'lucide-react';
 import Canvas from './components/Canvas';
 import { processImageForSimulation } from './utils/imageProcessor';
+import { generateMathSummary } from './utils/mathExporter';
 
 const App: React.FC = () => {
   const [simulations, setSimulations] = useState<SimulationConfig[]>(presets);
@@ -27,6 +28,7 @@ const App: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState(true);
   const [editingSim, setEditingSim] = useState<SimulationConfig | null>(null);
   const [maximizedSimId, setMaximizedSimId] = useState<number | null>(null);
+  const [mathSummary, setMathSummary] = useState<string | null>(null);
 
   const togglePlay = () => {
     if (isPlaying) {
@@ -103,6 +105,17 @@ const App: React.FC = () => {
 
   const openEditor = (sim: SimulationConfig) => {
       setEditingSim({ ...sim });
+  };
+
+  const handleExportMath = (sim: SimulationConfig) => {
+      const summary = generateMathSummary(sim, globalSettings);
+      setMathSummary(summary);
+  };
+
+  const copyMathToClipboard = () => {
+      if (mathSummary) {
+          navigator.clipboard.writeText(mathSummary);
+      }
   };
 
   const saveSimulationChanges = () => {
@@ -279,6 +292,35 @@ const App: React.FC = () => {
         </div>
       </header>
 
+      {/* Math Export Modal */}
+      {mathSummary && (
+        <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/90 backdrop-blur-sm p-4">
+            <div className="bg-gray-950 border border-purple-500/30 rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh] animate-in fade-in zoom-in duration-200">
+                <div className="p-4 border-b border-gray-800 flex justify-between items-center bg-gray-900">
+                    <div className="flex items-center gap-2">
+                        <Sigma className="text-purple-400" size={20} />
+                        <h2 className="text-lg font-bold text-white">Mathematical <span className="text-purple-400">Summary</span></h2>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <button 
+                            onClick={copyMathToClipboard}
+                            className="flex items-center gap-1.5 text-xs font-medium bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-1.5 rounded-lg transition-colors border border-gray-700"
+                        >
+                            <Copy size={14} />
+                            Copy
+                        </button>
+                        <button onClick={() => setMathSummary(null)} className="text-gray-400 hover:text-white p-1"><X size={20}/></button>
+                    </div>
+                </div>
+                <div className="flex-1 overflow-auto p-6 bg-gray-950">
+                    <pre className="font-mono text-sm text-gray-300 whitespace-pre-wrap leading-relaxed">
+                        {mathSummary}
+                    </pre>
+                </div>
+            </div>
+        </div>
+      )}
+
       {/* Editor Modal Overlay */}
       {editingSim && (
         <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
@@ -391,6 +433,13 @@ const App: React.FC = () => {
                 </div>
                 <div className="absolute top-4 right-4 z-20 flex gap-3">
                     <button 
+                        onClick={() => handleExportMath(maximizedSimConfig)}
+                        className="bg-gray-900/80 backdrop-blur p-2 rounded-lg border border-gray-700 text-white hover:text-purple-400 transition-colors shadow-lg"
+                        title="Export Math"
+                    >
+                        <Sigma size={20} />
+                    </button>
+                    <button 
                         onClick={() => openEditor(maximizedSimConfig)}
                         className="bg-gray-900/80 backdrop-blur p-2 rounded-lg border border-gray-700 text-white hover:text-cyan-400 transition-colors shadow-lg"
                         title="Settings"
@@ -420,6 +469,7 @@ const App: React.FC = () => {
                         onDelete={removeSimulation} 
                         onEdit={openEditor}
                         onMaximize={() => setMaximizedSimId(sim.id)}
+                        onExportMath={handleExportMath}
                     />
                 ))}
                 
