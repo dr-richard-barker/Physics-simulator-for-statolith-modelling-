@@ -27,6 +27,12 @@
     <link rel="stylesheet" href="https://dr-richard-barker.github.io/Plant_response_to_radiation/cose/cose-chrome.css" />
     <link rel="stylesheet" href="https://dr-richard-barker.github.io/Plant_response_to_radiation/cose/cose-map.css" />
     <link rel="stylesheet" href="https://dr-richard-barker.github.io/Plant_response_to_radiation/cose/cose-tailwind.css" />
+    <style>
+      /* Keep the CoSE rail chrome above this app's own sticky header */
+      .topbar.cose-dark{z-index:10001!important}
+      .sitebar.cose-dark{z-index:10000!important}
+      .map-scrim{z-index:9999!important}
+    </style>
   <script type="importmap">
 {
   "imports": {
