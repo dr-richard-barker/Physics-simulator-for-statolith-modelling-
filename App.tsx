@@ -131,10 +131,10 @@ const App: React.FC = () => {
   const maximizedSimConfig = simulations.find(s => s.id === maximizedSimId);
 
   return (
-    <div className="min-h-screen bg-black text-gray-100 font-sans selection:bg-cyan-500 selection:text-black">
+    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-cyan-500 selection:text-black">
       
       {/* Sticky Header Controls */}
-      <header className="sticky top-0 z-50 bg-gray-900/80 backdrop-blur-md border-b border-gray-800 shadow-2xl">
+      <header className="sticky top-0 z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-800 shadow-2xl">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
             
@@ -153,14 +153,14 @@ const App: React.FC = () => {
               
               {/* Time/Speed Control */}
               <div className="space-y-1.5">
-                 <label className="text-xs font-medium text-gray-400 flex justify-between">
+                 <label className="text-xs font-medium text-slate-400 flex justify-between">
                     <span>Sim Speed</span>
                     <span className="text-cyan-400">{isPlaying ? globalSettings.timeScale.toFixed(1) + 'x' : 'PAUSED'}</span>
                  </label>
                  <div className="flex items-center gap-2 h-7">
                      <button 
                         onClick={togglePlay}
-                        className={`p-1.5 rounded ${isPlaying ? 'bg-gray-800 hover:bg-gray-700 text-red-400' : 'bg-cyan-500 hover:bg-cyan-400 text-black'}`}
+                        className={`p-1.5 rounded ${isPlaying ? 'bg-slate-800 hover:bg-slate-700 text-red-400' : 'bg-cyan-500 hover:bg-cyan-400 text-black'}`}
                      >
                         {isPlaying ? <Pause size={14}/> : <Play size={14}/>}
                      </button>
@@ -171,14 +171,14 @@ const App: React.FC = () => {
                             if(!isPlaying) togglePlay();
                             setGlobalSettings(p => ({...p, timeScale: parseFloat(e.target.value)}))
                         }}
-                        className="w-full h-1.5 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-cyan-500"
+                        className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500"
                      />
                  </div>
               </div>
 
                {/* Gravity Control */}
               <div className="space-y-1.5">
-                 <label className="text-xs font-medium text-gray-400 flex justify-between">
+                 <label className="text-xs font-medium text-slate-400 flex justify-between">
                     <span>Global Gravity</span>
                     <span className="text-cyan-400">{globalSettings.gravityMultiplier.toFixed(1)}x</span>
                  </label>
@@ -187,14 +187,14 @@ const App: React.FC = () => {
                         type="range" min="0" max="3" step="0.1"
                         value={globalSettings.gravityMultiplier}
                         onChange={(e) => setGlobalSettings(p => ({...p, gravityMultiplier: parseFloat(e.target.value)}))}
-                        className="w-full h-1.5 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-cyan-500"
+                        className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500"
                     />
                  </div>
               </div>
 
               {/* Rotation Control */}
               <div className="space-y-1.5">
-                 <label className="text-xs font-medium text-gray-400 flex justify-between">
+                 <label className="text-xs font-medium text-slate-400 flex justify-between">
                     <span>Global Rotation</span>
                     <span className="text-cyan-400">{globalSettings.rotationMultiplier.toFixed(1)}x</span>
                  </label>
@@ -203,14 +203,14 @@ const App: React.FC = () => {
                         type="range" min="0" max="5" step="0.1"
                         value={globalSettings.rotationMultiplier}
                         onChange={(e) => setGlobalSettings(p => ({...p, rotationMultiplier: parseFloat(e.target.value)}))}
-                        className="w-full h-1.5 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-cyan-500"
+                        className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500"
                     />
                  </div>
               </div>
 
                {/* Stickiness Control */}
                <div className="space-y-1.5">
-                 <label className="text-xs font-medium text-gray-400 flex justify-between">
+                 <label className="text-xs font-medium text-slate-400 flex justify-between">
                     <span>Global Stickiness</span>
                     <span className="text-cyan-400">{globalSettings.stickinessMultiplier.toFixed(1)}x</span>
                  </label>
@@ -219,14 +219,14 @@ const App: React.FC = () => {
                         type="range" min="0" max="2" step="0.1"
                         value={globalSettings.stickinessMultiplier}
                         onChange={(e) => setGlobalSettings(p => ({...p, stickinessMultiplier: parseFloat(e.target.value)}))}
-                        className="w-full h-1.5 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-cyan-500"
+                        className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500"
                     />
                  </div>
               </div>
 
               {/* Image Analysis */}
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-gray-400 flex justify-between">
+                <label className="text-xs font-medium text-slate-400 flex justify-between">
                     <span>Scan Image</span>
                     {isAnalyzing && <span className="text-cyan-400 animate-pulse">SCANNING...</span>}
                 </label>
@@ -252,7 +252,7 @@ const App: React.FC = () => {
 
               {/* Texture Upload */}
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-gray-400 flex justify-between">
+                <label className="text-xs font-medium text-slate-400 flex justify-between">
                     <span>Ball Texture</span>
                     <span className={`text-[10px] ${globalSettings.userImage ? 'text-cyan-400' : 'text-gray-600'}`}>
                         {globalSettings.userImage ? 'ACTIVE' : 'DEFAULT'}
@@ -278,7 +278,7 @@ const App: React.FC = () => {
                     ) : (
                         <label 
                             htmlFor="texture-upload"
-                            className="w-full flex items-center justify-center gap-2 bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white border border-gray-700 hover:border-cyan-500/50 rounded h-full text-xs font-medium cursor-pointer transition-all"
+                            className="w-full flex items-center justify-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 hover:border-cyan-500/50 rounded h-full text-xs font-medium cursor-pointer transition-all"
                         >
                             <ImageIcon size={12} />
                             <span>Texture</span>
@@ -294,9 +294,9 @@ const App: React.FC = () => {
 
       {/* Math Export Modal */}
       {mathSummary && (
-        <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/90 backdrop-blur-sm p-4">
-            <div className="bg-gray-950 border border-purple-500/30 rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh] animate-in fade-in zoom-in duration-200">
-                <div className="p-4 border-b border-gray-800 flex justify-between items-center bg-gray-900">
+        <div className="fixed inset-0 z-[80] flex items-center justify-center bg-slate-950/90 backdrop-blur-sm p-4">
+            <div className="bg-slate-950 border border-purple-500/30 rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh] animate-in fade-in zoom-in duration-200">
+                <div className="p-4 border-b border-slate-800 flex justify-between items-center bg-slate-900">
                     <div className="flex items-center gap-2">
                         <Sigma className="text-purple-400" size={20} />
                         <h2 className="text-lg font-bold text-white">Mathematical <span className="text-purple-400">Summary</span></h2>
@@ -304,16 +304,16 @@ const App: React.FC = () => {
                     <div className="flex items-center gap-2">
                         <button 
                             onClick={copyMathToClipboard}
-                            className="flex items-center gap-1.5 text-xs font-medium bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-1.5 rounded-lg transition-colors border border-gray-700"
+                            className="flex items-center gap-1.5 text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg transition-colors border border-slate-700"
                         >
                             <Copy size={14} />
                             Copy
                         </button>
-                        <button onClick={() => setMathSummary(null)} className="text-gray-400 hover:text-white p-1"><X size={20}/></button>
+                        <button onClick={() => setMathSummary(null)} className="text-slate-400 hover:text-white p-1"><X size={20}/></button>
                     </div>
                 </div>
-                <div className="flex-1 overflow-auto p-6 bg-gray-950">
-                    <pre className="font-mono text-sm text-gray-300 whitespace-pre-wrap leading-relaxed">
+                <div className="flex-1 overflow-auto p-6 bg-slate-950">
+                    <pre className="font-mono text-sm text-slate-300 whitespace-pre-wrap leading-relaxed">
                         {mathSummary}
                     </pre>
                 </div>
@@ -323,17 +323,17 @@ const App: React.FC = () => {
 
       {/* Editor Modal Overlay */}
       {editingSim && (
-        <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-            <div className="bg-gray-900 border border-cyan-500/30 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
-                <div className="p-4 border-b border-gray-800 flex justify-between items-center bg-gray-950">
+        <div className="fixed inset-0 z-[70] flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4">
+            <div className="bg-slate-900 border border-cyan-500/30 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+                <div className="p-4 border-b border-slate-800 flex justify-between items-center bg-slate-950">
                     <h2 className="text-lg font-bold text-white">Edit <span className="text-cyan-400">{editingSim.name}</span></h2>
-                    <button onClick={() => setEditingSim(null)} className="text-gray-400 hover:text-white"><X size={20}/></button>
+                    <button onClick={() => setEditingSim(null)} className="text-slate-400 hover:text-white"><X size={20}/></button>
                 </div>
                 
                 <div className="p-6 space-y-5 overflow-y-auto max-h-[70vh]">
                     
                     <div className="space-y-2">
-                        <label className="text-sm font-medium text-gray-300 flex justify-between">
+                        <label className="text-sm font-medium text-slate-300 flex justify-between">
                             Gravity Strength
                             <span className="text-cyan-400">{editingSim.gravity.toFixed(2)}</span>
                         </label>
@@ -341,12 +341,12 @@ const App: React.FC = () => {
                             type="range" min="-0.5" max="1.0" step="0.01" 
                             value={editingSim.gravity}
                             onChange={(e) => setEditingSim({...editingSim, gravity: parseFloat(e.target.value)})}
-                            className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-cyan-500"
+                            className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500"
                         />
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-sm font-medium text-gray-300 flex justify-between">
+                        <label className="text-sm font-medium text-slate-300 flex justify-between">
                             Rotation Speed
                             <span className="text-cyan-400">{editingSim.rotationSpeed.toFixed(4)}</span>
                         </label>
@@ -354,12 +354,12 @@ const App: React.FC = () => {
                             type="range" min="-0.1" max="0.1" step="0.001" 
                             value={editingSim.rotationSpeed}
                             onChange={(e) => setEditingSim({...editingSim, rotationSpeed: parseFloat(e.target.value)})}
-                            className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-cyan-500"
+                            className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500"
                         />
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-sm font-medium text-gray-300 flex justify-between">
+                        <label className="text-sm font-medium text-slate-300 flex justify-between">
                             Bounciness (Restitution)
                             <span className="text-cyan-400">{editingSim.restitution.toFixed(2)}</span>
                         </label>
@@ -367,12 +367,12 @@ const App: React.FC = () => {
                             type="range" min="0.1" max="1.2" step="0.05" 
                             value={editingSim.restitution}
                             onChange={(e) => setEditingSim({...editingSim, restitution: parseFloat(e.target.value)})}
-                            className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-cyan-500"
+                            className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500"
                         />
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-sm font-medium text-gray-300 flex justify-between">
+                        <label className="text-sm font-medium text-slate-300 flex justify-between">
                             Wall Stickiness
                             <span className="text-cyan-400">{editingSim.stickiness ? editingSim.stickiness.toFixed(2) : '0.00'}</span>
                         </label>
@@ -380,12 +380,12 @@ const App: React.FC = () => {
                             type="range" min="0" max="0.5" step="0.01" 
                             value={editingSim.stickiness || 0}
                             onChange={(e) => setEditingSim({...editingSim, stickiness: parseFloat(e.target.value)})}
-                            className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-cyan-500"
+                            className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500"
                         />
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-sm font-medium text-gray-300 flex justify-between">
+                        <label className="text-sm font-medium text-slate-300 flex justify-between">
                             Friction (Air Resistance)
                             <span className="text-cyan-400">{editingSim.friction.toFixed(3)}</span>
                         </label>
@@ -393,15 +393,15 @@ const App: React.FC = () => {
                             type="range" min="0" max="0.2" step="0.001" 
                             value={editingSim.friction}
                             onChange={(e) => setEditingSim({...editingSim, friction: parseFloat(e.target.value)})}
-                            className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-cyan-500"
+                            className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500"
                         />
                     </div>
                 </div>
 
-                <div className="p-4 border-t border-gray-800 bg-gray-950 flex justify-end gap-3">
+                <div className="p-4 border-t border-slate-800 bg-slate-950 flex justify-end gap-3">
                     <button 
                         onClick={() => setEditingSim(null)}
-                        className="px-4 py-2 text-sm font-medium text-gray-400 hover:text-white transition-colors"
+                        className="px-4 py-2 text-sm font-medium text-slate-400 hover:text-white transition-colors"
                     >
                         Cancel
                     </button>
@@ -425,7 +425,7 @@ const App: React.FC = () => {
                 <div className="absolute top-4 left-4 z-20">
                      <button 
                         onClick={() => setMaximizedSimId(null)}
-                        className="flex items-center gap-2 bg-gray-900/80 backdrop-blur border border-gray-700 text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-all shadow-lg"
+                        className="flex items-center gap-2 bg-slate-900/80 backdrop-blur border border-slate-700 text-white px-4 py-2 rounded-lg hover:bg-slate-800 transition-all shadow-lg"
                      >
                         <ChevronLeft size={20} />
                         Back to Grid
@@ -434,28 +434,28 @@ const App: React.FC = () => {
                 <div className="absolute top-4 right-4 z-20 flex gap-3">
                     <button 
                         onClick={() => handleExportMath(maximizedSimConfig)}
-                        className="bg-gray-900/80 backdrop-blur p-2 rounded-lg border border-gray-700 text-white hover:text-purple-400 transition-colors shadow-lg"
+                        className="bg-slate-900/80 backdrop-blur p-2 rounded-lg border border-slate-700 text-white hover:text-purple-400 transition-colors shadow-lg"
                         title="Export Math"
                     >
                         <Sigma size={20} />
                     </button>
                     <button 
                         onClick={() => openEditor(maximizedSimConfig)}
-                        className="bg-gray-900/80 backdrop-blur p-2 rounded-lg border border-gray-700 text-white hover:text-cyan-400 transition-colors shadow-lg"
+                        className="bg-slate-900/80 backdrop-blur p-2 rounded-lg border border-slate-700 text-white hover:text-cyan-400 transition-colors shadow-lg"
                         title="Settings"
                     >
                         <Activity size={20} />
                     </button>
                 </div>
-                <div className="flex-1 bg-black/50 w-full h-full">
+                <div className="flex-1 bg-slate-950/50 w-full h-full">
                      <Canvas 
                         config={maximizedSimConfig} 
                         globalSettings={globalSettings} 
                      />
                 </div>
-                <div className="bg-gray-900/50 backdrop-blur border-t border-gray-800 p-4 text-center">
+                <div className="bg-slate-900/50 backdrop-blur border-t border-slate-800 p-4 text-center">
                     <h2 className="text-xl font-bold text-cyan-400">{maximizedSimConfig.name}</h2>
-                    <p className="text-gray-400">{maximizedSimConfig.nuanceDescription}</p>
+                    <p className="text-slate-400">{maximizedSimConfig.nuanceDescription}</p>
                 </div>
             </div>
         ) : (
@@ -475,7 +475,7 @@ const App: React.FC = () => {
                 
                 {simulations.length === 0 && (
                     <div className="col-span-full text-center py-20">
-                        <p className="text-gray-500">No simulations active. Upload an image or refresh to reload presets.</p>
+                        <p className="text-slate-500">No simulations active. Upload an image or refresh to reload presets.</p>
                         <button onClick={() => setSimulations(presets)} className="mt-4 text-cyan-400 underline">Reset Defaults</button>
                     </div>
                 )}

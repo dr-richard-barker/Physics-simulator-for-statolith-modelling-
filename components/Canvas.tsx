@@ -295,6 +295,7 @@ const Canvas: React.FC<CanvasProps> = ({ config, globalSettings }) => {
     const state = stateRef.current;
     const shapeRadius = Math.min(width, height) * 0.45;
     const totalRotation = state.rotation + manualRotationOffset.current;
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
 
     // Draw Shape
     let points: Vector2[] = [];
@@ -323,11 +324,11 @@ const Canvas: React.FC<CanvasProps> = ({ config, globalSettings }) => {
     }
     
     // Style Shape
-    ctx.strokeStyle = '#22D3EE'; // cyan-400
+    ctx.strokeStyle = isLight ? '#3B6EA5' : '#22D3EE'; // CoSE accent in light mode, cyan-400 in dark mode
     ctx.lineWidth = 3;
     ctx.lineJoin = 'round';
     ctx.stroke();
-    ctx.fillStyle = 'rgba(34, 211, 238, 0.05)';
+    ctx.fillStyle = isLight ? 'rgba(59, 110, 165, 0.06)' : 'rgba(34, 211, 238, 0.05)';
     ctx.fill();
 
     // Draw Balls
@@ -344,13 +345,13 @@ const Canvas: React.FC<CanvasProps> = ({ config, globalSettings }) => {
             ctx.clip();
             ctx.drawImage(userImageRef.current, screenX - ball.radius, screenY - ball.radius, ball.radius * 2, ball.radius * 2);
             ctx.restore();
-            ctx.strokeStyle = '#ffffff';
+            ctx.strokeStyle = isLight ? '#1a2230' : '#ffffff';
             ctx.lineWidth = 1.5;
             ctx.stroke();
         } else {
             ctx.fillStyle = ball.color;
             ctx.fill();
-            ctx.strokeStyle = '#000000';
+            ctx.strokeStyle = isLight ? '#1a2230' : '#000000';
             ctx.lineWidth = 1;
             ctx.stroke();
         }
